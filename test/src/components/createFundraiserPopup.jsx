@@ -27,6 +27,11 @@ export default function RegisterFundraiserPopup({ onClose }) {
 
     try {
       const contractAddress = await createContract();
+      if(contractAddress==="0x0")
+      {
+        alert("Fund Raiser Creation Failed");
+        return;
+      }
       console.log(contractAddress);
       const form = new FormData();
       form.append("title", formData.title);

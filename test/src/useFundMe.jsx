@@ -74,9 +74,11 @@ export function useFundMe() {
         await fetchAllContracts();
         return newContractAddress;
       } else {
+        return "0x0";
         console.error("❌ FundMeCreated event not found in logs.");
       }
     } catch (err) {
+      return "0x0";
       console.error("Contract creation error:", err);
     }
   };
