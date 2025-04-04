@@ -115,14 +115,19 @@
   border: none;
   font-size: 20px;
 }
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 #login {
   background-color: transparent;
-  width: 20%;
+  max-width: fit-content;
   color: #faf1e6;
   font-size: 15px;
-  padding: 5px;
-
+  padding: 10px;
+  margin-right: 17px;
   height: 40px;
   border-radius: 40px;
 }
@@ -289,4 +294,14 @@
   border: none;
   font-size: 20px;
   width: 100%;
+}
+
+.hide-scrollbar {
+  overflow: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }

@@ -4,6 +4,8 @@ import "./App.css";
 import "./index.css";
 import { useFundMe } from "./useFundMe";
 import CreateFundraiserPopup from "./components/createFundraiserPopup.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 
 function App() {
   const {
@@ -84,12 +86,14 @@ function App() {
                 <li>Team</li>
                 <li>Contact Us</li>
               </ul>
-              <button id="login" onClick={() => setShowCreatePopup(true)}>
-                Start A Fundraiser
-              </button>
-              <button id="login" onClick={() => setShowPopup(true)}>
-                Profile
-              </button>
+              <div className="buttons">
+                <button id="login" onClick={() => setShowCreatePopup(true)}>
+                  Start A Fundraiser
+                </button>
+                <button id="login" onClick={() => setShowPopup(true)}>
+                  Profile
+                </button>
+              </div>
             </div>
 
             <div className="title">
@@ -100,10 +104,16 @@ function App() {
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Pellentesque risus dui, eleifend
               </p>
-              <button className="donate">Donate Now</button>
+              <button className="donate">
+                Donate Now{" "}
+                <FontAwesomeIcon
+                  icon={faArrowUpRightFromSquare}
+                  style={{ marginLeft: "12px" }}
+                />
+              </button>
             </div>
 
-            <div className="fund-win">
+            <div className="fund-win hide-scrollbar">
               {contracts.map((addr, index) => (
                 <div className="card" key={index}>
                   <div className="image">
@@ -143,7 +153,7 @@ function App() {
                 </div>
               ))}
             </div>
-            <h2 className="view">View More</h2>
+            {/* <h2 className="view">View More</h2> */}
           </div>
 
           {showCreatePopup && (
