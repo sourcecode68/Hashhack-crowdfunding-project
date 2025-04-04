@@ -107,7 +107,7 @@
   font-weight: 100;
 }
 
-#donate {
+.donate {
   margin-top: 20px;
   padding: 10px 20px;
   border-radius: 20px;
@@ -118,10 +118,11 @@
 
 #login {
   background-color: transparent;
-  width: 100px;
-  font-size: 20px;
+  width: 20%;
+  color: #faf1e6;
+  font-size: 15px;
   padding: 5px;
-  font-weight: bold;
+
   height: 40px;
   border-radius: 40px;
 }
@@ -234,4 +235,58 @@
   right: 5%;
   top: 156%;
   z-index: 4;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Fixed size for the popup, centered on the screen */
+.popup-content {
+  background: white;
+  font-family: "Inter", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+  border-radius: 8px;
+  height: 40vh;
+  width: 1000px; /* Fixed width */
+  max-width: 90%; /* Prevents it from exceeding screen width */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+.popup-content #overlay-text {
+  text-align: left;
+  margin-left: 40px;
+  width: 600px;
+}
+.popup-content ul {
+  list-style: none;
+  display: flex;
+  padding: 0;
+}
+.popup-content li {
+  margin-right: 20px;
+}
+.popup-content p {
+  font-size: 15px;
+}
+.Withdraw {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  background-color: #faf1e6;
+  border: none;
+  font-size: 20px;
+  width: 100%;
 }

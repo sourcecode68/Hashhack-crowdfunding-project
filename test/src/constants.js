@@ -1,5 +1,5 @@
 export const factoryContractAddress =
-  "0x1AF00ddfBE430a78C8823B18Ca285079328D7992";
+  "0x32126166B15B28745c239d05A39b7aC23Dd01e52";
 export const factoryAbi = [
   {
     type: "function",
@@ -11,12 +11,7 @@ export const factoryAbi = [
   {
     type: "function",
     name: "create",
-    inputs: [
-      { name: "_name", type: "string", internalType: "string" },
-      { name: "_deadline", type: "string", internalType: "string" },
-      { name: "_description", type: "string", internalType: "string" },
-      { name: "_goalAmount", type: "uint256", internalType: "uint256" },
-    ],
+    inputs: [],
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -85,13 +80,7 @@ export const factoryAbi = [
 export const fundMeAbi = [
   {
     type: "constructor",
-    inputs: [
-      { name: "name", type: "string", internalType: "string" },
-      { name: "_deadline", type: "string", internalType: "string" },
-      { name: "_description", type: "string", internalType: "string" },
-      { name: "_goalAmount", type: "uint256", internalType: "uint256" },
-      { name: "_owner", type: "address", internalType: "address" },
-    ],
+    inputs: [{ name: "owner", type: "address", internalType: "address" }],
     stateMutability: "nonpayable",
   },
   { type: "fallback", stateMutability: "payable" },

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import "./index.css";
+import { ethers } from "ethers";
 // import AccountPopup from "./popups/AccountPopup";
 // import ProfilePopup from "./popups/ProfilePopup";
 // import DonationPopup from "./popups/DonationPopup";

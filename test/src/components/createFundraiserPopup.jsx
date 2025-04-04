@@ -85,7 +85,9 @@ export default function RegisterFundraiserPopup({ onClose }) {
             onChange={handleChange}
             required
           />
-          <button type="submit">Create Fundraiser</button>
+          <button type="submit" onClick={handleSubmit}>
+            Create Fundraiser
+          </button>
         </form>
       </div>
     </div>

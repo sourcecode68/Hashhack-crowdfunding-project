@@ -3,15 +3,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import "./index.css";
 import { useFundMe } from "./useFundMe";
-// import CreateFundraiserPopup from "./components/CreateFundraiserPopup";
-
-import Header from "./Header";
-import Dashboard from "./Dashboard";
-import DonationBox from "./DonationBox";
-
-import AccountPopup from "./popups/AccountPopup";
-import ProfilePopup from "./popups/ProfilePopup";
-import DonationPopup from "./popups/DonationPopup";
+import CreateFundraiserPopup from "./components/createFundraiserPopup.jsx";
 
 function App() {
   const {
@@ -28,10 +20,7 @@ function App() {
 
   const [showCreatePopup, setShowCreatePopup] = useState(false);
 
-  const [activePopup, setActivePopup] = useState(null);
-
-  const openPopup = (popupName) => setActivePopup(popupName);
-  const closePopup = () => setActivePopup(null);
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     if (account) {
@@ -47,15 +36,6 @@ function App() {
 
   return (
     <div>
-      <Header openPopup={openPopup} />
-      <Dashboard openPopup={openPopup} />
-      <DonationBox openPopup={openPopup} />
-
-      {/* Popups rendered in one place */}
-      {activePopup === "account" && <AccountPopup onClose={closePopup} />}
-      {activePopup === "profile" && <ProfilePopup onClose={closePopup} />}
-      {activePopup === "donation" && <DonationPopup onClose={closePopup} />}
-
       {!account ? (
         <div className="wallet-overlay">
           <h2>Welcome to My Platform</h2>
@@ -64,6 +44,36 @@ function App() {
         </div>
       ) : (
         <div className="main-platform">
+          {showPopup && (
+            <div className="popup-overlay">
+              <div className="popup-content">
+                <div className="image">
+                  <img src="/images/disaster.jpeg" alt="disaster" />
+                </div>
+                <div id="overlay-text">
+                  <h1>Title</h1>
+                  <ul>
+                    <li>Goal:</li>
+                    <li>3000</li>
+                  </ul>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Pellentesque risus dui, eleifend Lorem ipsum dolor sit amet,
+                    consectetur adipiscing elit. Pellentesque risus dui,
+                    eleifend
+                  </p>
+                  <button className="Withdraw">Withdraw</button>
+                </div>
+
+                <button
+                  className="close-btn"
+                  onClick={() => setShowPopup(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
           <div className="body">
             <div className="overlay"></div>
             <div className="navbar">
@@ -77,6 +87,9 @@ function App() {
               <button id="login" onClick={() => setShowCreatePopup(true)}>
                 Start A Fundraiser
               </button>
+              <button id="login" onClick={() => setShowPopup(true)}>
+                Profile
+              </button>
             </div>
 
             <div className="title">
@@ -87,7 +100,7 @@ function App() {
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Pellentesque risus dui, eleifend
               </p>
-              <button id="donate">Donate Now</button>
+              <button className="donate">Donate Now</button>
             </div>
 
             <div className="fund-win">
@@ -97,7 +110,7 @@ function App() {
                     <img src="/images/disaster.jpeg" alt="disaster" />
                   </div>
                   <ul>
-                    <li>Contract:</li>
+                    <li>Goal:</li>
                     <li>{addr.slice(0, 10)}...</li>
                   </ul>
                   <ul>

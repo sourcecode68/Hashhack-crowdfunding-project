@@ -36,34 +36,48 @@ export function useFundMe() {
     return { provider, signer };
   };
 
-  const createContract = async (
-    _name,
-    _deadline,
-    _description,
-    _goalAmount
-  ) => {
+  const createContract = async () => {
+    if (typeof window.ethereum === "undefined") {
+      alert("Please install MetaMask");
+      return;
+    }
+
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    const factoryContract = new ethers.Contract(
+      factoryContractAddress,
+      factoryAbi,
+      signer
+    );
+
     try {
-      const { signer } = await getProviderAndSigner();
-      const factoryContract = new ethers.Contract(
-        factoryContractAddress,
-        factoryAbi,
-        signer
-      );
-      const tx = await factoryContract.create(
-        _name,
-        _deadline,
-        _description,
-        _goalAmount
-      );
+      const tx = await factoryContract.create();
       const receipt = await tx.wait(1);
-      const event = receipt.logs.find(
-        (log) => log.address === factoryContractAddress
-      );
-      const newContractAddress = event?.args?.contractAddress;
-      await fetchAllContracts();
-      return newContractAddress;
+
+      const iface = new ethers.Interface(factoryAbi);
+      let newContractAddress = null;
+
+      for (const log of receipt.logs) {
+        try {
+          const parsedLog = iface.parseLog(log);
+          if (parsedLog.name === "FundMeCreated") {
+            newContractAddress = parsedLog.args.contractAddress; // or parsedLog.args[1]
+            break;
+          }
+        } catch (err) {
+          continue;
+        }
+      }
+
+      if (newContractAddress) {
+        console.log(`✅ New contract at: ${newContractAddress}`);
+        await fetchAllContracts();
+        return newContractAddress;
+      } else {
+        console.error("❌ FundMeCreated event not found in logs.");
+      }
     } catch (err) {
-      console.error(err);
+      console.error("Contract creation error:", err);
     }
   };
 
