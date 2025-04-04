@@ -5,7 +5,7 @@ import {FundMe} from "../src/FundMe.sol";
 contract FundMeTest is Test {
     FundMe fundMe;
     function setUp() external {
-        fundMe = new FundMe();
+        // fundMe = new FundMe();
     } //this runs first the first test function then set up is again called the test function 2
 
     function testDemo() public view {

@@ -9,10 +9,10 @@ contract FundMe {
     // using PriceConverter for uint256;
     uint256 public constant minimumUsd = 5e18;
     address[] public fundsList;
-    mapping(address funder => uint256 amount) funders;
+    mapping(address => uint256) funders;
     address public immutable owner;
-    constructor() {
-        owner = msg.sender; //the one who deploys the contract will call the constructor and will be the sender
+    constructor(address _owner) {
+        owner = _owner;
     }
     function fund() public payable {
         //gas will be sent for failed transactions
