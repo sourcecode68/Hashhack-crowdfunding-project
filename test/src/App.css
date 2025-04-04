@@ -1,0 +1,237 @@
+/* overlay */
+
+.wallet-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(245, 245, 245, 0.95);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* z-index: 9999; */
+  text-align: center;
+}
+
+.wallet-overlay button {
+  margin-top: 1rem;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  background-color: #ff7e1a;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.body {
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  margin: 0px;
+  background-color: black;
+  background-image: url("/images/woman1.jpg");
+  background-size: contain;
+  background-position: fill;
+  background-repeat: no-repeat;
+  min-height: 200vh;
+  width: 100%;
+  z-index: 1;
+}
+.navbar {
+  height: 50px;
+  overflow: hidden;
+  display: flex;
+  position: absolute;
+  top: 0px;
+  width: 90%;
+  border-bottom: 1px solid white;
+  padding-top: 10px;
+  z-index: 4;
+  justify-content: space-between;
+}
+.navbar ul {
+  list-style: none;
+  width: 30%;
+  /* padding-bottom: 4px; */
+  margin: 0px;
+  color: #d1d0ce;
+  /* font-weight: bold; */
+  font-family: "Inter", sans-serif;
+  display: flex;
+  justify-content: space-between;
+}
+.navbar ul li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 45px;
+}
+
+.navbar ul li:hover {
+  border-bottom: 5px solid #ff8f07;
+}
+
+.overlay {
+  /* display: flex; */
+
+  z-index: 2;
+  background-color: black;
+  opacity: 0.6;
+  min-height: 200vh;
+  width: 100%;
+}
+
+.need {
+  color: #ff8f07;
+}
+#title {
+  width: 60%;
+  font-size: 70px;
+}
+.title {
+  position: absolute;
+  font-family: "Inter", sans-serif;
+  top: 30%;
+  left: 5%;
+  color: #faf1e6;
+  z-index: 4;
+}
+
+.para {
+  font-size: 20px;
+  font-weight: 100;
+}
+
+#donate {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  background-color: #faf1e6;
+  border: none;
+  font-size: 20px;
+}
+
+#login {
+  background-color: transparent;
+  width: 100px;
+  font-size: 20px;
+  padding: 5px;
+  font-weight: bold;
+  height: 40px;
+  border-radius: 40px;
+}
+
+.fund-win {
+  /* overflow: hidden;
+  margin-top: 100px;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  left: 10%;
+  height: 60vh;
+  width: 100%;
+  z-index: 4; */
+  font-family: "Inter", sans-serif;
+  display: flex;
+  margin-top: 20%;
+  color: #faf1e6;
+  justify-content: center;
+  align-items: center; /* centers them vertically (if needed) */
+  position: absolute;
+  gap: 3rem; /* spacing between cards */
+  flex-wrap: wrap; /* allows cards to wrap if screen is small */
+  height: 70vh;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
+  z-index: 4;
+}
+
+.card {
+  /* flex: 1 1 250px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  backdrop-filter: blur(5px);
+  height: 60vh;
+
+  width: 20%;
+  border-radius: 50px;
+  border: 2px solid #faf1e6;
+  margin-right: 20px;
+  padding: 2rem;
+  border-radius: 8px;
+  min-width: 200px;
+  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+
+  text-align: center;
+}
+
+.card ul {
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+  width: 100%;
+  align-items: center;
+  list-style: none;
+  font-weight: bold;
+  padding: 0px;
+  margin-top: 8px;
+}
+
+/* Medium Screens - 2 cards per row */
+/* @media (max-width: 900px) {
+  .card {
+    flex: 0 1 calc(50% - 1rem);
+  }
+} */
+
+/* Small Screens - 1 card per row */
+/* @media (max-width: 600px) {
+  .card {
+    flex: 0 1 100%;
+  }
+} */
+
+.image {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 60%;
+  margin-bottom: 10px;
+}
+
+.image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* fills div and crops if needed */
+}
+
+.fund-win .donate {
+  border-radius: 60px;
+  width: 100%;
+  height: 50px;
+  margin-top: 20px;
+}
+
+.text {
+  font-size: 12px;
+  text-align: left;
+}
+
+.view {
+  position: absolute;
+  display: block;
+  color: #faf1e6;
+  font-family: "Inter", sans-serif;
+  font-size: 18px;
+  right: 5%;
+  top: 156%;
+  z-index: 4;
+}
