@@ -1,42 +1,109 @@
-import { useState, useEffect } from "react";
+// src/App.jsx
+import { useEffect, useState } from "react";
 import "./App.css";
 import "./index.css";
-import { ethers } from "ethers";
-// import AccountPopup from "./popups/AccountPopup";
-// import ProfilePopup from "./popups/ProfilePopup";
-// import DonationPopup from "./popups/DonationPopup";
+import { useFundMe } from "./useFundMe";
+import CreateFundraiserPopup from "./components/createFundraiserPopup.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 
-function Appp() {
-  const [walletConnected, setWalletConnected] = useState(false);
-  const [walletAddress, setWalletAddress] = useState("");
+function App() {
+  const {
+    account,
+    connectWallet,
+    fetchAllContracts,
+    setSelectedContract,
+    fundContract,
+    getBalance,
+    balance,
+    createContract,
+  } = useFundMe();
 
-  const connectWallet = async () => {
-    if (window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        setWalletAddress(accounts[0]);
-        setWalletConnected(true);
-      } catch (error) {
-        console.error("User rejected request:", error);
-      }
-    } else {
-      alert("MetaMask not detected. Please install MetaMask extension.");
+  const [showCreatePopup, setShowCreatePopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [contractDetails, setContractDetails] = useState([]);
+
+  const fetchContractDetailsFromBackend = async (address) => {
+    try {
+      const res = await fetch(`http://localhost:5000/contract-details?address=${address}`);
+      const data = await res.json();
+      return {
+        address,
+        title: data.title || "",
+        description: data.description || "",
+        image: data.image || "/images/disaster.jpeg",
+      };
+    } catch (err) {
+      console.error(`Failed to fetch details for ${address}`, err);
+      return {
+        address,
+        title: "",
+        description: "",
+        image: "/images/disaster.jpeg",
+      };
     }
+  };
+
+  const loadAllContracts = async () => {
+    try {
+      const addresses = await fetchAllContracts();
+      const detailsPromises = addresses.map((addr) => fetchContractDetailsFromBackend(addr));
+      const allDetails = await Promise.all(detailsPromises);
+      setContractDetails(allDetails);
+    } catch (error) {
+      console.error("Error loading contracts:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (account) {
+      loadAllContracts();
+    }
+  }, [account]);
+
+  const handleCreateFundraiser = async (data) => {
+    const newAddr = await createContract();
+    alert(`Fundraiser created at ${newAddr}`);
+    loadAllContracts();
   };
 
   return (
     <div>
-      {!walletConnected ? (
-        <div className="wallet-overlay ">
-          {/* <div className="overlay"></div> */}
+      {!account ? (
+        <div className="wallet-overlay">
           <h2>Welcome to My Platform</h2>
           <p>Please connect your MetaMask wallet to continue</p>
           <button onClick={connectWallet}>Connect Wallet</button>
         </div>
       ) : (
         <div className="main-platform">
+          {showPopup && (
+            <div className="popup-overlay">
+              <div className="popup-content">
+                <div className="image">
+                  <img src="/images/disaster.jpeg" alt="disaster" />
+                </div>
+                <div id="overlay-text">
+                  <h1>Title</h1>
+                  <ul>
+                    <li>Goal:</li>
+                    <li>3000</li>
+                  </ul>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Pellentesque risus dui, eleifend Lorem ipsum dolor sit amet,
+                    consectetur adipiscing elit. Pellentesque risus dui,
+                    eleifend
+                  </p>
+                  <button className="Withdraw">Withdraw</button>
+                </div>
+                <button className="close-btn" onClick={() => setShowPopup(false)}>
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className="body">
             <div className="overlay"></div>
             <div className="navbar">
@@ -47,7 +114,14 @@ function Appp() {
                 <li>Team</li>
                 <li>Contact Us</li>
               </ul>
-              <button id="login">Start A Fundraiser</button>
+              <div className="buttons">
+                <button id="login" onClick={() => setShowCreatePopup(true)}>
+                  Start A Fundraiser
+                </button>
+                <button id="login" onClick={() => setShowPopup(true)}>
+                  Profile
+                </button>
+              </div>
             </div>
 
             <div className="title">
@@ -58,71 +132,69 @@ function Appp() {
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Pellentesque risus dui, eleifend
               </p>
-              <button id="donate">Donate Now</button>
+              <button className="donate">
+                Donate Now{" "}
+                <FontAwesomeIcon
+                  icon={faArrowUpRightFromSquare}
+                  style={{ marginLeft: "12px" }}
+                />
+              </button>
             </div>
 
-            <div className="fund-win">
-              <div className="card">
-                <div className="image">
-                  <img src="/images/disaster.jpeg" alt="" />
+            <div className="fund-win hide-scrollbar">
+              {contractDetails.map((contract, index) => (
+                <div className="card" key={index}>
+                  <div className="image">
+                    <img
+                      src={contract.image || "/images/disaster.jpeg"}
+                      alt={contract.title || "Fundraiser Image"}
+                    />
+                  </div>
+                  <ul>
+                    <li><strong>Title:</strong> {contract.title || "Untitled"}</li>
+                  </ul>
+                  <ul>
+                    <li><strong>Address:</strong> {contract.address?.slice(0, 10) || "N/A"}...</li>
+                  </ul>
+                  <ul>
+                    <li><strong>Balance:</strong>
+                      <button
+                        onClick={async () => {
+                          setSelectedContract(contract.address);
+                          await getBalance();
+                        }}
+                        style={{ marginLeft: "10px" }}
+                      >
+                        Check
+                      </button>
+                      {balance && <span> {balance} ETH</span>}
+                    </li>
+                  </ul>
+                  <p className="text">{contract.description || "No description provided."}</p>
+                  <button
+                    className="donate"
+                    onClick={async () => {
+                      setSelectedContract(contract.address);
+                      await fundContract("0.01");
+                    }}
+                  >
+                    Donate 0.01 ETH
+                  </button>
                 </div>
-                <ul>
-                  <li>Goal:</li>
-                  <li></li>
-                </ul>
-                <ul>
-                  <li>Raised:</li>
-                  <li></li>
-                </ul>
-                <div className="text">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Pellentesque risus dui, eleifend
-                </div>
-                <button className="donate">Donate</button>
-              </div>
-              <div className="card">
-                <div className="image">
-                  <img src="/images/disaster.jpeg" alt="" />
-                </div>
-                <ul>
-                  <li>Goal:</li>
-                  <li></li>
-                </ul>
-                <ul>
-                  <li>Raised:</li>
-                  <li></li>
-                </ul>
-                <div className="text">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Pellentesque risus dui, eleifend
-                </div>
-                <button className="donate">Donate</button>
-              </div>
-              <div className="card">
-                <div className="image">
-                  <img src="/images/disaster.jpeg" alt="" />
-                </div>
-                <ul>
-                  <li>Goal:</li>
-                  <li></li>
-                </ul>
-                <ul>
-                  <li>Raised:</li>
-                  <li></li>
-                </ul>
-                <div className="text">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Pellentesque risus dui, eleifend
-                </div>
-                <button className="donate">Donate</button>
-              </div>
+              ))}
             </div>
-            <h2 className="view">View More</h2>
           </div>
+
+          {showCreatePopup && (
+            <CreateFundraiserPopup
+              onClose={() => setShowCreatePopup(false)}
+              onSubmit={handleCreateFundraiser}
+            />
+          )}
         </div>
       )}
     </div>
   );
 }
 
-export default Appp;
+export default App;
