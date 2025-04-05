@@ -1,5 +1,7 @@
 /* overlay */
-
+button:hover {
+  cursor: pointer;
+}
 .wallet-overlay {
   position: fixed;
   top: 0;
@@ -38,7 +40,7 @@
   background-size: contain;
   background-position: fill;
   background-repeat: no-repeat;
-  min-height: 200vh;
+  min-height: 190vh;
   width: 100%;
   z-index: 1;
 }
@@ -144,11 +146,13 @@
   z-index: 4; */
   font-family: "Inter", sans-serif;
   display: flex;
-  margin-top: 20%;
+  margin-top: 30%;
   color: #faf1e6;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center; /* centers them vertically (if needed) */
   position: absolute;
+  margin-left: 4rem;
+  margin-right: 2rem;
   gap: 3rem; /* spacing between cards */
   flex-wrap: wrap; /* allows cards to wrap if screen is small */
   height: 70vh;
@@ -177,6 +181,9 @@
   /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
 
   text-align: center;
+}
+.card:hover {
+  border: 2px solid #f4a568;
 }
 
 .card ul {
@@ -286,6 +293,8 @@
 .popup-content p {
   font-size: 15px;
 }
+.xmark {
+}
 .Withdraw {
   margin-top: 20px;
   padding: 10px 20px;
@@ -296,12 +305,74 @@
   width: 100%;
 }
 
-.hide-scrollbar {
+.styled-scrollbar {
   overflow: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
 }
 
-.hide-scrollbar::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+.styled-scrollbar::-webkit-scrollbar {
+  width: 8px;
 }
+
+.styled-scrollbar::-webkit-scrollbar-track {
+  background: rgb(40, 39, 39);
+  border-radius: 10px;
+}
+
+.styled-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}
+
+.styled-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Optional for Firefox */
+.styled-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: grey rgb(27, 27, 27);
+}
+
+#camp {
+  text-align: right;
+  position: absolute;
+  color: white;
+  font-size: 40px;
+  right: 5%;
+  top: 80%;
+  font-family: "Inter", sans-serif;
+  z-index: 4;
+}
+.xmark {
+  color: black;
+  font-size: 25px;
+  position: absolute;
+  top: 13rem; /* Change these values to fix the icon's position */
+  right: 13rem; /* Could be left, bottom, etc. based on your design */
+  cursor: pointer;
+}
+
+/* #footer */
+/* .footer {
+  background-color: #111;
+  color: #eee;
+  padding: 40px 20px 20px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 20px;
+  font-size: 13px;
+  color: #aaa;
+  border-top: 1px solid #333;
+} */
