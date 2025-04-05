@@ -84,5 +84,11 @@ We welcome contributions! Please open an issue or submit a PR for improvements o
 
 This project is licensed under the MIT License.
 
+## 🧗 Challenges We Encountered
+
+- **Dynamic Solidity Versioning**: Adjusting and maintaining compatibility with evolving Solidity versions posed challenges, especially during contract compilation and deployment across different environments.
+- **Framework Integration Complexity**: Integrating modern tools like **Vite** with **Ethers.js** was non-trivial due to limited documentation and fewer community resources, making the development workflow more intricate.
+- **Limited Faucet Access**: Testing on Ethereum testnets was constrained by limited faucet availability, impacting the pace of development and thorough testing of transaction flows.
+
 ## Some Important Points
 The Contract id of already contract is 0xaAaE531962533a505cF8254baCDBE89D43B37EAF.
