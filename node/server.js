@@ -68,7 +68,32 @@ app.post("/create_event", upload.single("image"), (req, res) => {
     }
   );
 });
+app.get("/contract-details", (req, res) => {
+  const { address } = req.query;
+  console.log(address);
+  if (!address) {
+    return res.status(400).json({ error: "Missing address parameter" });
+  }
 
+  const query = "SELECT title, description, image_path FROM fundraisers WHERE contract_address = ?";
+  db.query(query, [address], (err, results) => {
+    if (err) {
+      console.error("Database query error:", err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: "No fundraiser found for this address" });
+    }
+
+    const { title, description, image_path } = results[0];
+    res.json({
+      title,
+      description,
+      image: image_path || "/images/disaster.jpeg"
+    });
+  });
+});
 // Start server
 app.listen(5000, () => {
   console.log("Server running at http://localhost:5000");

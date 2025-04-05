@@ -92,11 +92,13 @@ export function useFundMe() {
         signer
       );
       const all = await factoryContract.getAllContracts();
-      setContracts([...all]);
+      console.log("Contracts fetched from factory:", all);
+      return all; // no need for spread
     } catch (err) {
-      console.error(err);
+      console.error("Failed to fetch contracts:", err);
     }
   };
+  
 
   const fetchUserContracts = async () => {
     try {

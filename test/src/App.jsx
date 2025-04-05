@@ -1,4 +1,3 @@
-// src/App.jsx
 import { useEffect, useState } from "react";
 import "./App.css";
 import "./index.css";
@@ -15,7 +14,6 @@ function App() {
   const {
     account,
     connectWallet,
-    contracts,
     fetchAllContracts,
     setSelectedContract,
     fundContract,
@@ -25,20 +23,57 @@ function App() {
   } = useFundMe();
 
   const [showCreatePopup, setShowCreatePopup] = useState(false);
-
   const [showPopup, setShowPopup] = useState(false);
   const handleClosePopup = () => setShowPopup(false);
+  const [contractDetails, setContractDetails] = useState([]);
+
+  const fetchContractDetailsFromBackend = async (address) => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/contract-details?address=${address}`
+      );
+      const data = await res.json();
+      return {
+        address,
+        title: data.title || "",
+        description: data.description || "",
+        goal: data.goal || "",
+        image: data.image || "/images/disaster.jpeg",
+      };
+    } catch (err) {
+      console.error(`Failed to fetch details for ${address}`, err);
+      return {
+        address,
+        title: "",
+        description: "",
+        image: "/images/disaster.jpeg",
+      };
+    }
+  };
+
+  const loadAllContracts = async () => {
+    try {
+      const addresses = await fetchAllContracts();
+      const detailsPromises = addresses.map((addr) =>
+        fetchContractDetailsFromBackend(addr)
+      );
+      const allDetails = await Promise.all(detailsPromises);
+      setContractDetails(allDetails);
+    } catch (error) {
+      console.error("Error loading contracts:", error);
+    }
+  };
 
   useEffect(() => {
     if (account) {
-      fetchAllContracts();
+      loadAllContracts();
     }
   }, [account]);
 
   const handleCreateFundraiser = async (data) => {
-    const newAddr = await createContract(); // optional: save metadata in IPFS/backend
+    const newAddr = await createContract();
     alert(`Fundraiser created at ${newAddr}`);
-    fetchAllContracts();
+    loadAllContracts(); // refresh list
   };
 
   return (
@@ -70,13 +105,10 @@ function App() {
                   </ul>
                   <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Pellentesque risus dui, eleifend Lorem ipsum dolor sit amet,
-                    consectetur adipiscing elit. Pellentesque risus dui,
-                    eleifend
+                    Pellentesque risus dui, eleifend
                   </p>
                   <button className="Withdraw">Withdraw</button>
                 </div>
-
                 <button
                   className="close-btn"
                   onClick={() => setShowPopup(false)}
@@ -86,6 +118,7 @@ function App() {
               </div>
             </div>
           )}
+
           <div className="body">
             <div className="overlay"></div>
             <div className="navbar">
@@ -126,48 +159,61 @@ function App() {
                 />
               </button>
             </div>
-            {/* <h1 id="camp">LIVE CAMPAIGNS</h1> */}
-            <div className="fund-win styled-scrollbar">
-              {contracts.map((addr, index) => (
-                <div className="card" key={index}>
-                  <div className="image">
-                    <img src="/images/disaster.jpeg" alt="disaster" />
+
+            <div className="fund-win hide-scrollbar">
+              {contractDetails
+                .filter(
+                  (contract) => contract.title && contract.title !== "Untitled"
+                )
+                .map((contract, index) => (
+                  <div className="card" key={index}>
+                    <div className="image">
+                      <img
+                        src={contract.image || "/images/disaster.jpeg"}
+                        alt={contract.title}
+                      />
+                    </div>
+                    <ul>
+                      <li>
+                        <strong>Title:</strong> {contract.title}
+                      </li>
+                    </ul>
+                    <ul>
+                      <li>
+                        <strong>Address:</strong>{" "}
+                        {contract.address?.slice(0, 10)}...
+                      </li>
+                    </ul>
+                    <ul>
+                      <li>
+                        <strong>Balance:</strong>
+                        <button
+                          onClick={async () => {
+                            setSelectedContract(contract.address);
+                            await getBalance();
+                          }}
+                          style={{ marginLeft: "10px" }}
+                        >
+                          Check
+                        </button>
+                        {balance && <span> {balance} ETH</span>}
+                      </li>
+                    </ul>
+                    <p className="text">
+                      {contract.description || "No description provided."}
+                    </p>
+                    <button
+                      className="donate"
+                      onClick={async () => {
+                        setSelectedContract(contract.address);
+                        await fundContract("0.01");
+                      }}
+                    >
+                      Donate 0.01 ETH
+                    </button>
                   </div>
-                  <ul>
-                    <li>Goal:</li>
-                    <li>{addr.slice(0, 10)}...</li>
-                  </ul>
-                  <ul>
-                    <li>Balance:</li>
-                    <li>
-                      <button
-                        onClick={async () => {
-                          setSelectedContract(addr);
-                          await getBalance();
-                        }}
-                      >
-                        Check
-                      </button>
-                      {balance && <span> {balance} ETH</span>}
-                    </li>
-                  </ul>
-                  <div className="text">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Pellentesque risus dui, eleifend
-                  </div>
-                  <button
-                    className="donate"
-                    onClick={async () => {
-                      setSelectedContract(addr);
-                      await fundContract("0.01");
-                    }}
-                  >
-                    Donate 0.01 ETH
-                  </button>
-                </div>
-              ))}
+                ))}
             </div>
-            {/* <h2 className="view">View More</h2> */}
           </div>
 
           {showCreatePopup && (
